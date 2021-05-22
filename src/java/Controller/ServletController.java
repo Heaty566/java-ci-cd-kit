@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.Auth;
+import DAO.AuthDAO;
 import DAO.PhoneDAO;
 import DTO.Mobile;
 import DTO.User;
@@ -44,6 +44,8 @@ public class ServletController extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		String action = (String) request.getParameter("action");
+
+		/* ------------------------------ Page Service ------------------------------ */
 		String loginPage = "login.jsp";
 		String registerPage = "register.jsp";
 		String listItemPage = "listItem.jsp";
@@ -53,25 +55,21 @@ public class ServletController extends HttpServlet {
 		String notFoundPage = "notFound.jsp";
 		String errorPage = "error.jsp";
 
-		Auth auth = new Auth();
+		AuthDAO auth = new AuthDAO();
 		PhoneDAO phoneDAO = new PhoneDAO();
 
-		if (action.equals("loginPage")) {
-			response.sendRedirect(loginPage);
-			return;
-		}
-		if (action.equals("registerPage")) {
-			response.sendRedirect(registerPage);
-			return;
-		}
-
-		if (action.equals("addPhonePage")) {
-			response.sendRedirect(addPhonePage);
-			return;
-		}
-
+		/* ----------------------------- Router mapping ----------------------------- */
 		try {
-			if (action.equals("register")) {
+			/* ------------------------------ Common Router ----------------------------- */
+			if (action.equals("loginPage")) {
+				response.sendRedirect(loginPage);
+				return;
+			} else if (action.equals("registerPage")) {
+				response.sendRedirect(registerPage);
+				return;
+			} else if (action.equals("register")) {
+
+				/* ------------------------------- Get Params ------------------------------- */
 				String fullName = Helper.getStringParam(request, "fullName", "Full name", 1, 50);
 				Integer password = Helper.getIntParams(request, "password", "Password", 1, Integer.MAX_VALUE);
 				Integer confirmPassword = Helper.getIntParams(request, "confirmPassword", "Confirm Password", 1,
@@ -80,14 +78,16 @@ public class ServletController extends HttpServlet {
 
 				if (password != null && confirmPassword != null && fullName != null && role != null) {
 
+					/* --------------------------- Checking exist user -------------------------- */
 					User isExistUser = auth.getUserByUsername(fullName);
 					if (isExistUser != null) {
 						request.setAttribute("fullNameError", "Fullname is taken");
+						/* ------------------------ Checking matches password ----------------------- */
 					} else if (!Objects.equals(confirmPassword, password)) {
 
 						request.setAttribute("confirmPasswordError", "confirmPassword is not matches password");
 					} else {
-
+						/* -------------------------------- Add user -------------------------------- */
 						auth.addUser(fullName, password, role);
 						RequestDispatcher rd = request.getRequestDispatcher(loginPage);
 						rd.forward(request, response);
@@ -99,18 +99,21 @@ public class ServletController extends HttpServlet {
 				rd.forward(request, response);
 
 			} else if (action.equals("login")) {
+				/* ------------------------------- Get Params ------------------------------- */
 				String fullName = Helper.getStringParam(request, "fullName", "Full name", 1, 50);
 				Integer password = Helper.getIntParams(request, "password", "Password", 1, Integer.MAX_VALUE);
 
 				if (password != null && fullName != null) {
-
+					/* --------------------------- Checking exist user -------------------------- */
 					User isExistUser = auth.getUserByUsername(fullName);
-
 					if (isExistUser == null) {
 						request.setAttribute("errorMessage", "Username or password are invalid");
+						/* ------------------------ Checking matches password ----------------------- */
 					} else if (isExistUser.getPassword() != password) {
 						request.setAttribute("errorMessage", "Username or password are invalid");
 					} else {
+
+						/* --------------------------- Create User Session -------------------------- */
 						HttpSession session = request.getSession();
 						session.setAttribute("fullName", isExistUser.getFullName());
 						session.setAttribute("role", isExistUser.getRole());
@@ -125,29 +128,29 @@ public class ServletController extends HttpServlet {
 				rd.forward(request, response);
 
 			} else
-
+			/* ------------------------------- User Router ------------------------------ */
 			if (Helper.protectedRouter(request, response, 0, loginPage)) {
 				if (action.equals("listItemPage")) {
-
+					/* ------------------ Prevent empty page on the first load ------------------ */
 					request.setAttribute("firstLoad", false);
-
+					/* ------------------------------- Get Params ------------------------------- */
 					Float minPrice = Helper.getFloatParams(request, "minPrice", "Min Price", 0, Float.MAX_VALUE, 0);
 					Float maxPrice = Helper.getFloatParams(request, "maxPrice", "Max Price", minPrice, Float.MAX_VALUE,
 							9999999);
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's id", 0, 50, "");
 					String mobileName = Helper.getStringParam(request, "mobileName", "Mobile's id", 0, 50, "");
-
+					/* ------------------------------- Query Phone ------------------------------ */
 					ArrayList<Mobile> mobiles = phoneDAO.getPhones(minPrice, maxPrice, mobileId, mobileName);
 					request.setAttribute("mobiles", mobiles);
 
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
 
-				}
-				if (action.equals("addCartItem")) {
-
+				} else if (action.equals("addCartItem")) {
+					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 					Mobile mobile = phoneDAO.getOnePhone(mobileId);
+					/* ------------------------------ Add New Phone ----------------------------- */
 					if (mobileId != null && mobile != null && mobile.isNotSale()) {
 						HttpSession session = request.getSession(false);
 
@@ -161,11 +164,12 @@ public class ServletController extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
 
-				}
-				if (action.equals("deleteCartPhone") && Helper.protectedRouter(request, response, 0, loginPage)) {
-					// ----------- Get Params
-
+				} else if (action.equals("deleteCartPhone")
+						&& Helper.protectedRouter(request, response, 0, loginPage)) {
+					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
+
+					/* ------------------------------ Delete Phone ------------------------------ */
 					if (mobileId != null && phoneDAO.getOnePhone(mobileId) != null) {
 						HttpSession session = request.getSession(false);
 						List<String> cartItems = (List<String>) Helper.getSessionAttribute(request, "cart",
@@ -176,11 +180,12 @@ public class ServletController extends HttpServlet {
 
 					response.sendRedirect("/Test/ServletController?action=cartItemPage");
 
-				}
-				if (action.equals("cartItemPage")) {
+				} else if (action.equals("cartItemPage")) {
 					ArrayList<Mobile> myCart = new ArrayList();
 					List<String> cartItems = (List<String>) Helper.getSessionAttribute(request, "cart",
 							new ArrayList());
+
+					/* ------------------------------ Query Mobile ------------------------------ */
 					Float total = 0f;
 					for (int i = 0; i < cartItems.size(); i++) {
 						Mobile mobile = phoneDAO.getOnePhone(cartItems.get(i));
@@ -201,9 +206,15 @@ public class ServletController extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher(loginPage);
 					rd.forward(request, response);
 				}
-			} else if (Helper.protectedRouter(request, response, 1, loginPage)) {
-				if (action.equals("addPhone")) {
+			} else
+			/* ------------------------ Staff And Manager Router ------------------------ */
+			if (Helper.protectedRouter(request, response, 1, loginPage)) {
 
+				if (action.equals("addPhonePage")) {
+					response.sendRedirect(addPhonePage);
+					return;
+				} else if (action.equals("addPhone")) {
+					/* ------------------------------- Get Params ------------------------------- */
 					String mobileName = Helper.getStringParam(request, "mobileName", "Mobile's name", 1, 50);
 					String description = Helper.getStringParam(request, "description", "Description", 1, 50);
 					Integer quantity = Helper.getIntParams(request, "quantity", "Quantity", 1, 10);
@@ -211,7 +222,7 @@ public class ServletController extends HttpServlet {
 							1950, 2100);
 					Integer notSaleInt = Helper.getIntParams(request, "notSale", "Not Sale", 0, 1);
 					Float price = Helper.getFloatParams(request, "price", "Price", 1, 99999999);
-
+					/* -------------------------- handle add new phone -------------------------- */
 					if (mobileName != null && description != null && quantity != null && yearOfProduction != null
 							&& notSaleInt != null && price != null) {
 						boolean notSale = notSaleInt == 1;
@@ -224,10 +235,11 @@ public class ServletController extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher(addPhonePage);
 					rd.forward(request, response);
 
-				}
-				if (action.equals("updatePhonePage")) {
-
+				} else if (action.equals("updatePhonePage")) {
+					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
+
+					/* ------------------------------ Query mobile ------------------------------ */
 					Mobile mobile = phoneDAO.getOnePhone(mobileId);
 					if (mobileId != null && mobile != null) {
 						request.setAttribute("mobile", mobile);
@@ -240,21 +252,22 @@ public class ServletController extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
 
-				}
-				if (action.equals("updatePhone")) {
-
+				} else if (action.equals("updatePhone")) {
+					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 					String description = Helper.getStringParam(request, "description", "Description", 1, 50);
 					Integer quantity = Helper.getIntParams(request, "quantity", "Quantity", 1, 10);
 					Integer notSaleInt = Helper.getIntParams(request, "notSale", "Not Sale", 0, 1);
 					Float price = Helper.getFloatParams(request, "price", "Price", 1, 99999999);
 
+					/* --------------------------- Query Update Phone --------------------------- */
 					if (mobileId != null) {
 						Mobile mobile = phoneDAO.getOnePhone(mobileId);
 						if (mobile != null) {
 							request.setAttribute("mobile", mobile);
 						}
 					}
+					/* --------------------------- Handle Update Phone -------------------------- */
 					if (mobileId != null && description != null && quantity != null && notSaleInt != null
 							&& price != null) {
 						boolean notSale = notSaleInt == 1;
@@ -268,11 +281,10 @@ public class ServletController extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher(updatePhonePage);
 					rd.forward(request, response);
 
-				}
-				if (action.equals("deletePhone")) {
-
+				} else if (action.equals("deletePhone")) {
+					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
-
+					/* --------------------------- Handle Delete Phone -------------------------- */
 					if (mobileId != null) {
 						phoneDAO.deleteOne(mobileId);
 					}
@@ -281,11 +293,13 @@ public class ServletController extends HttpServlet {
 
 				}
 			} else {
+				/* ---------------------------- Not Found Handle ---------------------------- */
 				RequestDispatcher rd = request.getRequestDispatcher(notFoundPage);
 				rd.forward(request, response);
 			}
 
 		} catch (Exception e) {
+			/* ---------------------------- Error Page Handle --------------------------- */
 			RequestDispatcher rd = request.getRequestDispatcher(errorPage);
 			rd.forward(request, response);
 		}

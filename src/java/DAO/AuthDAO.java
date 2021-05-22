@@ -17,7 +17,7 @@ import Utils.Connector;
  *
  * @author heaty566
  */
-public class Auth {
+public class AuthDAO {
     public boolean addUser(String fullName, Integer password, Integer role) {
 
         try {
