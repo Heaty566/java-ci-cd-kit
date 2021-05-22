@@ -17,25 +17,14 @@
 	<body>
 		<%
 			Helper.protectedRouter(request, response, 0, "login.jsp");
-			Boolean firstLoad = (Boolean) request.getAttribute("firstLoad");
+			Float total = (Float) Helper.getClientParams(request, "total",0f);
 			ArrayList<Mobile> mobiles =(ArrayList<Mobile>)  request.getAttribute("mobiles");
 			if (mobiles == null){
 				mobiles = new ArrayList() ;
 			}
 		%>
 		<%@include file="navbar.jsp" %>
-		<form method="POST" action="ServletController?action=listItemPage">
 
-			Min Price	<input type="number" name="minPrice"  value="0" />
-			<br/>
-			Max Price	<input type="number" name="maxPrice"  value="999999" />
-			<br/>
-			Mobile Name<input type="text" name="mobileName"  value="" />
-			<br/>
-			Mobile Id<input type="text" name="mobileId"  value="" />
-			<br/>
-			<input type="submit" value="Search"/>
-		</form>
 
 
 
@@ -82,19 +71,14 @@
 						<%= mobiles.get(i).isNotSale()%>
 					</td>
 					<td>
-						<a  href="/Test/ServletController?action=updatePhonePage&mobileId=<%= mobiles.get(i).getMobileId()%>" >Update</a>
-					</td>
-					<td>
-						<a onclick="return sure()" href="/Test/ServletController?action=deletePhone&mobileId=<%= mobiles.get(i).getMobileId()%>">delete</a>
-					</td>
-					<td>
-						<a  href="/Test/ServletController?action=addCartItem&mobileId=<%= mobiles.get(i).getMobileId()%>">Add</a>
+						<a onclick="return sure()" href="/Test/ServletController?action=deleteCartPhone&mobileId=<%= mobiles.get(i).getMobileId()%>">delete</a>
 					</td>
 				</tr>
 				<% }%>
 
 			</tbody>
 		</table>
+		<p>Total: <%=total %></p>
 		<script>
 			function sure(){
 				const value = confirm("Are you sure to delete item");
@@ -102,11 +86,7 @@
 			}
 		
 		</script>
-		<%  if (firstLoad == null){ %>
-		<script>
-		      window.location.href = "/Test/ServletController?action=listItemPage";	
-		</script>
-		<% } %>
+
 
 
 

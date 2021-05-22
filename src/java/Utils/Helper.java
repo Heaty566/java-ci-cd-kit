@@ -34,6 +34,16 @@ public class Helper {
         return value;
     }
 
+    public static String getStringParam(HttpServletRequest request, String field, String label, int min, int max,
+            String defaultValue) {
+        String value = getStringParam(request, field, label, min, max);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
     public static Integer getIntParams(HttpServletRequest request, String field, String label, int min, int max) {
 
         String value = (String) request.getParameter(field);
@@ -60,6 +70,16 @@ public class Helper {
         return realValue;
     }
 
+    public static Integer getIntParams(HttpServletRequest request, String field, String label, int min, int max,
+            int defaultValue) {
+        Integer value = getIntParams(request, field, label, min, max);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
     public static Float getFloatParams(HttpServletRequest request, String field, String label, float min, float max) {
 
         String value = (String) request.getParameter(field);
@@ -84,6 +104,25 @@ public class Helper {
         }
 
         return realValue;
+    }
+
+    public static Float getFloatParams(HttpServletRequest request, String field, String label, float min, float max,
+            float defaultValue) {
+        Float value = getFloatParams(request, field, label, min, max);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
+    public static Object getClientParams(HttpServletRequest request, String field, Object defaultValue) {
+        Object value = request.getAttribute(field);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
     }
 
     public static boolean protectedRouter(HttpServletRequest request, HttpServletResponse response, int role,

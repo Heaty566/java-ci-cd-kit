@@ -4,6 +4,7 @@
     Author     : heaty566
 --%>
 
+<%@page import="Utils.Helper"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,20 +15,9 @@
 	<body>
 
 		<%
-			String nameError = (String) request.getAttribute("fullNameError");
-			if (nameError == null){
-				nameError = "";
-			}
-			
-			String passwordError = (String) request.getAttribute("passwordError");
-			if (passwordError == null){
-				passwordError = "";
-			}
-			String errorMessage = (String) request.getAttribute("errorMessage");
-			if (errorMessage == null){
-				errorMessage = "";
-			}
-			
+			String nameError = (String) Helper.getClientParams(request, "fullNameError","");
+			String passwordError = (String) Helper.getClientParams(request, "confirmPasswordError","");
+			String errorMessage = (String) Helper.getClientParams(request, "errorMessage","");
 		%>
 		<%@include file="navbar.jsp" %>
 		<form action="ServletController?action=login" method="POST">

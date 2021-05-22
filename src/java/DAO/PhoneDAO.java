@@ -45,26 +45,28 @@ public class PhoneDAO {
 
 	}
 
-	public ArrayList<Mobile> getPhoneByPrice(Float minPrice, Float maxPrice) {
+	public ArrayList<Mobile> getPhones(Float minPrice, Float maxPrice, String mobileId, String mobileName) {
 		ArrayList<Mobile> mobiles = new ArrayList<Mobile>();
 		try {
 
 			Connection conn = Connector.getConnection();
-			String sql = "SELECT * FROM tbl_mobile WHERE price >= ? and price <= ? ";
+			String sql = "SELECT * FROM tbl_mobile WHERE price >= ? and price <= ? and mobileId like ? and mobileName like ? ";
 			PreparedStatement state = conn.prepareStatement(sql);
 			state.setFloat(1, minPrice);
 			state.setFloat(2, maxPrice);
+			state.setString(3, "%" + mobileId + "%");
+			state.setString(4, "%" + mobileName + "%");
 			ResultSet result = state.executeQuery();
 			while (result.next()) {
-				String mobileId = result.getString("mobileId");
+				String mobileIdSql = result.getString("mobileId");
 				String description = result.getString("description");
 				Float price = result.getFloat("price");
-				String mobileName = result.getString("mobileName");
+				String mobileNameSql = result.getString("mobileName");
 				Integer quantity = result.getInt("quantity");
 				Integer yearOfProduction = result.getInt("yearOfProduction");
 				Boolean notSale = result.getBoolean("notSale");
 
-				Mobile mobile = new Mobile(mobileId, description, price, mobileName, quantity, yearOfProduction,
+				Mobile mobile = new Mobile(mobileIdSql, description, price, mobileNameSql, quantity, yearOfProduction,
 						notSale);
 				mobiles.add(mobile);
 			}
@@ -75,6 +77,82 @@ public class PhoneDAO {
 			e.printStackTrace();
 			return null;
 		}
+
+	}
+
+	public boolean updateOnePhone(String mobileId, String description, Float price, int quantity, boolean notSale) {
+		try {
+
+			Connection conn = Connector.getConnection();
+			String sql = "UPDATE tbl_mobile SET description = ?, price = ?, quantity = ?,notSale = ? WHERE mobileId = ? ";
+			PreparedStatement state = conn.prepareStatement(sql);
+			state.setString(1, description);
+			state.setFloat(2, price);
+			state.setInt(3, quantity);
+			state.setBoolean(4, notSale);
+			state.setString(5, mobileId);
+			state.executeUpdate();
+			state.close();
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
+
+	public boolean deleteOne(String mobileId) {
+		try {
+
+			Connection conn = Connector.getConnection();
+			String sql = "DELETE tbl_mobile  WHERE mobileId = ? ";
+			PreparedStatement state = conn.prepareStatement(sql);
+			state.setString(1, mobileId);
+			state.executeUpdate();
+			state.close();
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
+
+	public Mobile getOnePhone(String mobileId) {
+		try {
+
+			Connection conn = Connector.getConnection();
+			String sql = "SELECT * FROM tbl_mobile WHERE mobileId = ? ";
+			PreparedStatement state = conn.prepareStatement(sql);
+			state.setString(1, mobileId);
+			ResultSet result = state.executeQuery();
+			while (result.next()) {
+				String sqlMobileId = result.getString("mobileId");
+				String description = result.getString("description");
+				Float price = result.getFloat("price");
+				String mobileName = result.getString("mobileName");
+				Integer quantity = result.getInt("quantity");
+				Integer yearOfProduction = result.getInt("yearOfProduction");
+				Boolean notSale = result.getBoolean("notSale");
+
+				Mobile mobile = new Mobile(sqlMobileId, description, price, mobileName, quantity, yearOfProduction,
+						notSale);
+				state.close();
+				return mobile;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return null;
 
 	}
 }

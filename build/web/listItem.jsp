@@ -24,6 +24,18 @@
 			}
 		%>
 		<%@include file="navbar.jsp" %>
+		<form method="POST" action="ServletController?action=listItemPage">
+
+			Min Price	<input type="number" name="minPrice"  value="0" />
+			<br/>
+			Max Price	<input type="number" name="maxPrice"  value="999999" />
+			<br/>
+			Mobile Name<input type="text" name="mobileName"  value="" />
+			<br/>
+			Mobile Id<input type="text" name="mobileId"  value="" />
+			<br/>
+			<input type="submit" value="Search"/>
+		</form>
 
 
 
@@ -37,6 +49,9 @@
 					<th>Price</th>
 					<th>Quantity</th>
 					<th>Year Of Production</th>
+					<th>Is Sale</th>
+					<th>Update</th>
+					<th>Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -63,15 +78,33 @@
 					<td>
 						<%= mobiles.get(i).getYearOfProduction()%>
 					</td>
+					<td>
+						<%= mobiles.get(i).isNotSale()%>
+					</td>
+					<td>
+						<a  href="/Test/ServletController?action=updatePhonePage&mobileId=<%= mobiles.get(i).getMobileId()%>" >Update</a>
+					</td>
+					<td>
+						<a onclick="return sure()" href="/Test/ServletController?action=deletePhone&mobileId=<%= mobiles.get(i).getMobileId()%>">delete</a>
+					</td>
+					<td>
+						<a  href="/Test/ServletController?action=addCartItem&mobileId=<%= mobiles.get(i).getMobileId()%>">Add</a>
+					</td>
 				</tr>
 				<% }%>
 
 			</tbody>
 		</table>
-
+		<script>
+			function sure(){
+				const value = confirm("Are you sure to delete item");
+				return value;
+			}
+		
+		</script>
 		<%  if (firstLoad == null){ %>
 		<script>
-		      window.location.href = "http://localhost:8088/Test/ServletController?action=listItem&minPrice=0&maxPrice=90000000";	
+		      window.location.href = "/Test/ServletController?action=listItemPage";	
 		</script>
 		<% } %>
 

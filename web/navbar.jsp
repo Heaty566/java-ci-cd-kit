@@ -7,12 +7,11 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div>
-	
-	<a href="login.jsp">
-		Home
-	</a>
-	<a href="register.jsp">Register</a>
-	<a href="login.jsp">Login</a>
-	<a href="listItem.jsp">List</a>
-	<a href="addPhone.jsp">add Phone</a>
+	<a href="/Test/ServletController?action=loginPage"> Home </a>
+	<a href="/Test/ServletController?action=registerPage">Register</a>
+	<a href="/Test/ServletController?action=loginPage">Login</a>
+	<a href="/Test/ServletController?action=logout">Logout</a>
+	<a href="/Test/ServletController?action=listItemPage">List</a>
+	<a href="/Test/ServletController?action=addPhonePage">add Phone</a>
+	<a href="/Test/ServletController?action=cartItemPage">Cart</a>
 </div>

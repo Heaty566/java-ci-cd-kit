@@ -13,39 +13,17 @@
 		<title>JSP Page</title>
 	</head>
 	<body>
-           
+
 		<%@include file="navbar.jsp" %>
 
 		<%
-			
 			Helper.protectedRouter(request, response, 1, "login.jsp"); 
-			String mobileNameError = (String) request.getAttribute("mobileNameError");
-			if (mobileNameError == null){
-				mobileNameError = "";
-			}
-			String descriptionError = (String) request.getAttribute("descriptionError");
-			if (descriptionError == null){
-				descriptionError = "";
-			}
-			String priceError = (String) request.getAttribute("priceError");
-			if (priceError == null){
-				priceError = "";
-			}
-			String quantityError = (String) request.getAttribute("quantityError");
-			if (quantityError == null){
-				quantityError = "";
-			}
-			String yearOfProductionError = (String) request.getAttribute("yearOfProductionError");
-			if (yearOfProductionError == null){
-				yearOfProductionError = "";
-			}
-			String notSaleError = (String) request.getAttribute("notSaleError");
-			if (notSaleError == null){
-				notSaleError = "";
-			}
-			
-			
-			
+			String mobileNameError = (String) Helper.getClientParams(request, "mobileNameError", "");
+			String descriptionError = (String)  Helper.getClientParams(request, "descriptionError", "");
+			String priceError = (String)  Helper.getClientParams(request, "priceError", "");
+			String quantityError = (String)  Helper.getClientParams(request, "quantityError", "");
+			String yearOfProductionError = (String)  Helper.getClientParams(request, "yearOfProductionError", "");
+			String notSaleError = (String)  Helper.getClientParams(request, "notSaleError", "");
 		%>
                 <form action="ServletController?action=addPhone" method="POST">
                         Mobile's name <input name="mobileName" type="text" /><p><%= mobileNameError %></p>
@@ -56,7 +34,7 @@
                         <br />
                         Mobile's quantity <input name="quantity" type="number" /><p><%= quantityError %></p>
                         <br />
-                        Mobile's year of production <input name="yearOfProduction" type="number" /><p><%= yearOfProductionError %></p>
+                        Mobile's year of production <input name="yearOfProduction" type="number"  /><p><%= yearOfProductionError %></p>
                         <br />
                         Mobile's not Sale
                         <br />
