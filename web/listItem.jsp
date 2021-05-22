@@ -18,10 +18,7 @@
 		<%
 			Helper.protectedRouter(request, response, 0, "login.jsp");
 			Boolean firstLoad = (Boolean) request.getAttribute("firstLoad");
-			ArrayList<Mobile> mobiles =(ArrayList<Mobile>)  request.getAttribute("mobiles");
-			if (mobiles == null){
-				mobiles = new ArrayList() ;
-			}
+			ArrayList<Mobile> mobiles = (ArrayList<Mobile>) Helper.getClientParams(request,"mobiles", new ArrayList() );
 		%>
 		<%@include file="navbar.jsp" %>
 		<form method="POST" action="ServletController?action=listItemPage">
@@ -50,8 +47,14 @@
 					<th>Quantity</th>
 					<th>Year Of Production</th>
 					<th>Is Sale</th>
+
+
+					<% if (Helper.correctRole(request, 1,2)) { %>
 					<th>Update</th>
 					<th>Delete</th>
+						<% } else { %>
+					<th>Add</th>
+						<% } %>
 				</tr>
 			</thead>
 			<tbody>
@@ -81,15 +84,21 @@
 					<td>
 						<%= mobiles.get(i).isNotSale()%>
 					</td>
+					<% if (Helper.correctRole(request, 1,2)) { %>
 					<td>
 						<a  href="/Test/ServletController?action=updatePhonePage&mobileId=<%= mobiles.get(i).getMobileId()%>" >Update</a>
 					</td>
 					<td>
 						<a onclick="return sure()" href="/Test/ServletController?action=deletePhone&mobileId=<%= mobiles.get(i).getMobileId()%>">delete</a>
 					</td>
+
+					<% } else { %>
 					<td>
 						<a  href="/Test/ServletController?action=addCartItem&mobileId=<%= mobiles.get(i).getMobileId()%>">Add</a>
 					</td>
+					<% } %>
+
+
 				</tr>
 				<% }%>
 

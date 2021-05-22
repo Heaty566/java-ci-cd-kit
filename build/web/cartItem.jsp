@@ -18,16 +18,9 @@
 		<%
 			Helper.protectedRouter(request, response, 0, "login.jsp");
 			Float total = (Float) Helper.getClientParams(request, "total",0f);
-			ArrayList<Mobile> mobiles =(ArrayList<Mobile>)  request.getAttribute("mobiles");
-			if (mobiles == null){
-				mobiles = new ArrayList() ;
-			}
+			ArrayList<Mobile> mobiles = (ArrayList<Mobile>) Helper.getClientParams(request,"mobiles", new ArrayList() );
 		%>
 		<%@include file="navbar.jsp" %>
-
-
-
-
 		<table>
 			<thead>
 				<tr>
