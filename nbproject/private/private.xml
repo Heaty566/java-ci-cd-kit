@@ -3,17 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/notFound.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/addPhone.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/cartItem.jsp</file>
+            <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/META-INF/context.xml</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/navbar.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/Utils/Connector.java</file>
-            <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/DAO/Auth.java</file>
+            <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/errorPage.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/DAO/PhoneDAO.java</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/register.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/Controller/ServletController.java</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/login.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/DTO/User.java</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/listItem.jsp</file>
+            <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/DAO/AuthDAO.java</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/web/updatePhone.jsp</file>
             <file>file:/C:/Users/heaty566/Documents/NetBeansProjects/Test/src/java/DTO/Mobile.java</file>

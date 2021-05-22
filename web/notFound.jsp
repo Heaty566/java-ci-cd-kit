@@ -11,10 +11,11 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>JSP Page</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"/>
 	</head>
 	<body>
 		<%@include file="navbar.jsp" %>
-		<p>Page Error</p>
+		<h1 class="m-2 text-danger">Page is not found</h1>
 	</body>
 
 </html>

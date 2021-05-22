@@ -154,10 +154,10 @@ public class Helper {
 		return true;
 	}
 
-	public static boolean protectedRouter(HttpServletRequest request, HttpServletResponse response, int role,
-			String page) throws Exception {
+	public static boolean protectedRouter(HttpServletRequest request, HttpServletResponse response, int minRole,
+			int maxRole, String page) throws Exception {
 
-		if (!isLogin(request) || !correctRole(request, role, 2)) {
+		if (!isLogin(request) || !correctRole(request, minRole, maxRole)) {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			request.setAttribute("errorMessage", "action is not allow, please login first");
 			rd.forward(request, response);

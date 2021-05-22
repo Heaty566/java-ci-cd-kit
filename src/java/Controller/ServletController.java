@@ -64,10 +64,14 @@ public class ServletController extends HttpServlet {
 			if (action.equals("loginPage")) {
 				response.sendRedirect(loginPage);
 				return;
-			} else if (action.equals("registerPage")) {
+
+			}
+			if (action.equals("registerPage")) {
 				response.sendRedirect(registerPage);
 				return;
-			} else if (action.equals("register")) {
+
+			}
+			if (action.equals("register")) {
 
 				/* ------------------------------- Get Params ------------------------------- */
 				String fullName = Helper.getStringParam(request, "fullName", "Full name", 1, 50);
@@ -97,8 +101,10 @@ public class ServletController extends HttpServlet {
 
 				RequestDispatcher rd = request.getRequestDispatcher(registerPage);
 				rd.forward(request, response);
+				return;
 
-			} else if (action.equals("login")) {
+			}
+			if (action.equals("login")) {
 				/* ------------------------------- Get Params ------------------------------- */
 				String fullName = Helper.getStringParam(request, "fullName", "Full name", 1, 50);
 				Integer password = Helper.getIntParams(request, "password", "Password", 1, Integer.MAX_VALUE);
@@ -126,10 +132,11 @@ public class ServletController extends HttpServlet {
 
 				RequestDispatcher rd = request.getRequestDispatcher(loginPage);
 				rd.forward(request, response);
+				return;
 
-			} else
+			}
 			/* ------------------------------- User Router ------------------------------ */
-			if (Helper.protectedRouter(request, response, 0, loginPage)) {
+			if (Helper.protectedRouter(request, response, 0, 2, loginPage)) {
 				if (action.equals("listItemPage")) {
 					/* ------------------ Prevent empty page on the first load ------------------ */
 					request.setAttribute("firstLoad", false);
@@ -145,8 +152,10 @@ public class ServletController extends HttpServlet {
 
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
+					return;
 
-				} else if (action.equals("addCartItem")) {
+				}
+				if (action.equals("addCartItem")) {
 					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 					Mobile mobile = phoneDAO.getOnePhone(mobileId);
@@ -163,9 +172,10 @@ public class ServletController extends HttpServlet {
 
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
+					return;
 
-				} else if (action.equals("deleteCartPhone")
-						&& Helper.protectedRouter(request, response, 0, loginPage)) {
+				}
+				if (action.equals("deleteCartPhone")) {
 					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 
@@ -178,9 +188,11 @@ public class ServletController extends HttpServlet {
 						session.setAttribute("cart", cartItems);
 					}
 
-					response.sendRedirect("/Test/ServletController?action=cartItemPage");
+					response.sendRedirect("/ServletController?action=cartItemPage");
+					return;
 
-				} else if (action.equals("cartItemPage")) {
+				}
+				if (action.equals("cartItemPage")) {
 					ArrayList<Mobile> myCart = new ArrayList();
 					List<String> cartItems = (List<String>) Helper.getSessionAttribute(request, "cart",
 							new ArrayList());
@@ -199,21 +211,26 @@ public class ServletController extends HttpServlet {
 					request.setAttribute("total", total);
 					RequestDispatcher rd = request.getRequestDispatcher(cartItemPage);
 					rd.forward(request, response);
+					return;
 
-				} else if (action.equals("logout") && Helper.protectedRouter(request, response, 0, loginPage)) {
+				}
+				if (action.equals("logout")) {
 					HttpSession session = request.getSession();
 					session.invalidate();
 					RequestDispatcher rd = request.getRequestDispatcher(loginPage);
 					rd.forward(request, response);
+					return;
 				}
-			} else
+			} else {
+				return;
+			}
 			/* ------------------------ Staff And Manager Router ------------------------ */
-			if (Helper.protectedRouter(request, response, 1, loginPage)) {
-
+			if (Helper.protectedRouter(request, response, 1, 2, loginPage)) {
 				if (action.equals("addPhonePage")) {
 					response.sendRedirect(addPhonePage);
 					return;
-				} else if (action.equals("addPhone")) {
+				}
+				if (action.equals("addPhone")) {
 					/* ------------------------------- Get Params ------------------------------- */
 					String mobileName = Helper.getStringParam(request, "mobileName", "Mobile's name", 1, 50);
 					String description = Helper.getStringParam(request, "description", "Description", 1, 50);
@@ -234,8 +251,9 @@ public class ServletController extends HttpServlet {
 
 					RequestDispatcher rd = request.getRequestDispatcher(addPhonePage);
 					rd.forward(request, response);
-
-				} else if (action.equals("updatePhonePage")) {
+					return;
+				}
+				if (action.equals("updatePhonePage")) {
 					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 
@@ -251,8 +269,10 @@ public class ServletController extends HttpServlet {
 
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
+					return;
 
-				} else if (action.equals("updatePhone")) {
+				}
+				if (action.equals("updatePhone")) {
 					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 					String description = Helper.getStringParam(request, "description", "Description", 1, 50);
@@ -280,8 +300,9 @@ public class ServletController extends HttpServlet {
 
 					RequestDispatcher rd = request.getRequestDispatcher(updatePhonePage);
 					rd.forward(request, response);
-
-				} else if (action.equals("deletePhone")) {
+					return;
+				}
+				if (action.equals("deletePhone")) {
 					/* ------------------------------- Get Params ------------------------------- */
 					String mobileId = Helper.getStringParam(request, "mobileId", "Mobile's name", 1, 50);
 					/* --------------------------- Handle Delete Phone -------------------------- */
@@ -290,13 +311,15 @@ public class ServletController extends HttpServlet {
 					}
 					RequestDispatcher rd = request.getRequestDispatcher(listItemPage);
 					rd.forward(request, response);
-
+					return;
 				}
 			} else {
-				/* ---------------------------- Not Found Handle ---------------------------- */
-				RequestDispatcher rd = request.getRequestDispatcher(notFoundPage);
-				rd.forward(request, response);
+				return;
 			}
+			/* ---------------------------- Not Found Handle ---------------------------- */
+			RequestDispatcher rd = request.getRequestDispatcher(notFoundPage);
+			rd.forward(request, response);
+			return;
 
 		} catch (Exception e) {
 			/* ---------------------------- Error Page Handle --------------------------- */
