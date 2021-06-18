@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "e:\\booking-hotel\\src\\java\\dev\\javax.servlet-api-4.0.1.jar"
+    ]
+}
