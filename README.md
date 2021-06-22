@@ -23,9 +23,6 @@
     apt-get install docker-compose &&
     apt-get install dos2unix &&
     ufw disable &&
-    cd &&
-    mkdir app && 
-    cd app &&
     apt-get install vim  &&
     wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && sudo bash install.sh &&
     bt 14
