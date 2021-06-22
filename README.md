@@ -1,7 +1,7 @@
 ![Build Netbeans](github/logo.svg)
 # Simple Deploy For Java Web Application
-## How to Deploy
-1. ### Buy A VPS ( SQL server requires 2GBs of ram to run)
+## How To Deploy
+1. Buy A VPS ( SQL server requires 2GBs of ram to run)
 2. Connect To VPS via CMD and enter your root user password(The password will not appear on the screen when you're typing)
 
     Syntax
@@ -13,7 +13,7 @@
 
     ssh root@178.128.212.244
     ```
-3. Install packages
+3. Install Packages
 
     This command includes docker-compose, dos2unix, aaPanel, vim, turn off firewall, and basic setup.
     Syntax
@@ -90,9 +90,9 @@
     ```json
         docker-compose up -d --build
     ```
-9. Push to dockerhub
+9. Push To dockerhub
  ![Pust to Dockerhub](github/docker-build.png)
-10. Upload docker-compose and delete build
+10. Upload docker-compose And Delete Build Options
  ![Upload docker-compose](github/upload.png)
 
     Note: We just need this line in your build PC, not in VPS PC
@@ -115,7 +115,7 @@
                         ports:
                                 - 1533:1433
     ```
-11. Run docker in VPS 
+11. Run Docker In VPS 
 
     Return to root
     ```json
@@ -132,7 +132,7 @@
     ```json
       docker-compose up
     ```
-12. Connect to database online
+12. Connect To Database Cloud
 
     In Azure studio or Microsoft SQL Server Management
     ```json
@@ -142,7 +142,7 @@
         Password: YOUR_DATABASE_PASSWORD in docker-compose file
     ```
      ![Azure Connect](github/sql.png)
-13. Update For Project
+13. Update Your Project
 
     When you change your project and need to deploy the latest version of your project
     ```json
@@ -151,7 +151,7 @@
         Run step 10 
         Run step 11 (docker-compose pull && docker-compose up -d)
     ```
-## How to setup CI/CD
+## How To Setup CI/CD
 ### Idea
     1. Create listening when some one creates push request to a particular branch on github
     2. Check build ACTIVE option
