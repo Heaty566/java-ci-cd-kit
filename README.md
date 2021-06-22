@@ -1,7 +1,7 @@
 ![Build Netbeans](github/logo.svg)
 # Simple Deploy For Java Web Application
 ## How to Deploy
-1. ### Buy A VPS ( sql server requires 2GBS of ram to run)
+1. ### Buy A VPS ( SQL server requires 2GBs of ram to run)
 2. Connect To VPS via CMD and enter your root user password(The password will not appear on the screen when you're typing)
 
     Syntax
