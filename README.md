@@ -149,7 +149,7 @@
        ```
 
        ```json
-         docker-compose up
+         docker-compose up -d
        ```
 
 12. Connect To Database Cloud
